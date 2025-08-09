@@ -314,6 +314,10 @@
             margin: 0px 0px 5px 5px;
             color: var(--text-label);
         }
+
+        label-checkbox {
+            color: white;
+        }
         
         input, select, textarea {
             padding: 12px;
@@ -1608,15 +1612,14 @@
             
             const lines = translationResultText.split('\n');
             const allPairs = [];
-            let ignoreFormatErrors = false; // 사용자가 오류를 무시하기로 했는지 확인하는 플래그
-            let skippedLines = 0; // 건너뛴 라인 수를 세는 카운터
+            let ignoreFormatErrors = false; 
+            let skippedLines = 0; 
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (line === '') continue; 
 
                 const equalIndex = line.indexOf('=');
-                // '='가 없거나, '=' 뒤에 공백을 제외한 내용이 없는 경우를 오류로 간주
                 const isInvalidPair = equalIndex === -1 || line.substring(equalIndex + 1).trim().length === 0;
 
                 if (isInvalidPair) {
@@ -1638,7 +1641,7 @@
                         console.warn(`[일괄 변환 경고] 형식 오류가 있는 ${i + 1}번째 줄을 건너뜁니다: "${line}"`);
                         continue;
                     }
-                
+                } else { 
                     const original = line.substring(0, equalIndex);
                     const translation = line.substring(equalIndex + 1);
                     
@@ -1899,7 +1902,7 @@
                 document.getElementById('inputText').value = e.target.result;
                 showToast(`파일 "${fileName}"이 성공적으로 로드되었습니다.`);
                 updateInputTextLabel();
-                updateInputAnalysisViewer(); // 함수 이름 변경
+                updateInputAnalysisViewer(); 
             };
             reader.readAsText(file, 'utf-8');
         }
@@ -2062,7 +2065,9 @@
             
             const extractStats = document.getElementById('extractStats');
             if (extractStats.style.display === 'block') {
-                extractStats.innerHTML += ' <strong style="color: var(--text-status-connecting);">[원본이 수정되었습니다. 다시 추출해주세요!]</strong>';
+                if (!extractStats.innerHTML.includes('[원본이 수정되었습니다')) {
+                    extractStats.innerHTML += ' <strong style="color: var(--text-status-connecting);">[원본이 수정되었습니다. 다시 추출해주세요!]</strong>';
+                }
             }
         }
 
@@ -2369,17 +2374,16 @@
             feather.replace();
         }
         
-                function updateInputAnalysisViewer() { // 함수 이름 변경
+        function updateInputAnalysisViewer() { 
             const text = document.getElementById('inputText').value;
             const targetContainer = document.getElementById('input-text-header');
 
-            removeLogUI(); // 기존 로그 UI 제거 함수 호출
+            removeLogUI(); 
 
             if (!text.trim()) return;
             
             const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
             
-            // 1. 플레이스홀더 추출 및 정렬
             const chineseRegex = /[\u4e00-\u9fff]/;
             const placeholderRegex = /{{\s*(.*?)\s*}}/g;
             const placeholderMatches = [...new Set(text.match(placeholderRegex) || [])];
@@ -2399,7 +2403,6 @@
                 });
             }
 
-            // 2. JS 변수 선언 추출 및 정렬
             const varRegex = /(?:const|let|var)\s+([a-zA-Z0-9_$]*[\u4e00-\u9fff]+[a-zA-Z0-9_$]*)|(?:const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
             const varMatches = [...new Set(Array.from(text.matchAll(varRegex), m => m[1] || m[2]))];
             varMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a)); // 중국어 포함 항목을 위로
@@ -2417,13 +2420,12 @@
                 });
             }
 
-            // 3. HTML 합치기 및 로그 버튼 생성
             let finalLogContent = '';
             if (placeholderHtml) {
                 finalLogContent += placeholderHtml;
             }
             if (varHtml) {
-                if (placeholderHtml) { // 플레이스홀더와 변수 선언이 모두 있으면 구분선 추가
+                if (placeholderHtml) { 
                     finalLogContent += '<hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 12px 0;">';
                 }
                 finalLogContent += varHtml;
@@ -2572,7 +2574,7 @@
                             <p style="margin: 0;">총 ${lines.filter(l => l.includes('=')).length}줄 중 <strong id="mismatch-count" style="color: #f0a7a7;">${mismatches.length}</strong> 라인에서 불일치가 발견되었습니다.</p>
                         </div>
                         <div style="float: left; font-size: 11px; margin-top: 5px;">
-                            <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <label-checkbox style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
                                 <input type="checkbox" id="hide-comma-mismatch-checkbox" onchange="filterLogView()">
                                 쉼표 개수만 다른 경우 숨기기
                             </label>
@@ -2584,7 +2586,6 @@
                     const originalCounts = getCharCounts(item.originalChars);
                     const translatedCounts = getCharCounts(item.translatedChars);
                     
-                    // 쉼표만 다른지 확인하기 위해, 두 객체의 복사본에서 모든 쉼표를 제거
                     const tempOriginalCounts = { ...originalCounts };
                     const tempTranslatedCounts = { ...translatedCounts };
                     delete tempOriginalCounts[','];
