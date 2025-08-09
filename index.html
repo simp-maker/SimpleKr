@@ -56,7 +56,6 @@
             --shadow-container: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
-        
         body[data-theme="deep-forest"] {
             --bg-main: #111A19;
             --bg-container: rgba(23, 34, 33, 0.95);
@@ -107,8 +106,6 @@
             --shadow-container: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        
-        
         body[data-theme="citrus-grove"] {
             --bg-main: #fdfaf4;
             --bg-container: rgba(255, 255, 255, 0.95);
@@ -159,7 +156,6 @@
             --shadow-container: 0 20px 40px rgba(71, 60, 51, 0.1);
         }
 
-        
         body[data-theme="modern-slate"] {
             --bg-main: #f4f4f6;
             --bg-container: rgba(255, 255, 255, 0.95);
@@ -599,7 +595,6 @@
             color: var(--text-file-label-hover);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
         }
-
         
         .theme-switcher {
             position: absolute;
@@ -629,8 +624,6 @@
             border: 3px solid var(--border-focus);
             transform: scale(1.1);
         }
-
-        
         
         .feather {
             width: 1em; 
@@ -643,7 +636,6 @@
             vertical-align: -0.1em; 
         }
 
-        
         .section-title .feather {
             width: 1.1em; 
             height: 1.1em;
@@ -652,7 +644,6 @@
             margin-top: 3px;
             vertical-align: -0.2em;
         }
-
         
         .btn .feather {
             margin-right: 4px; 
@@ -670,7 +661,6 @@
             align-items: flex-end; 
         }
 
-        
         .toast-notification {
             
             width: max-content; 
@@ -685,13 +675,14 @@
             transition: all 0.4s ease-in-out; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+        
         .toast-notification.show {
             opacity: 1;
             transform: translateX(0); 
         }
 
         .toast-notification.success { background-color: var(--btn-primary-bg); }
-        .toast-notification.error { background-color: #bf3737; }
+        .toast-notification.error { background-color: #bf3737; color: #ffffff }
         .toast-notification.info { background-color: var(--bg-btn-secondary); color: var(--text-btn-secondary); }
 
         
@@ -747,7 +738,6 @@
             pointer-events: none;
         }
 
-        
         .log-popover::-webkit-scrollbar {
             width: 8px; 
         }
@@ -781,6 +771,37 @@
             word-break: break-all; 
         }
 
+        #advancedSettingsPanel {
+            padding: 15px;
+            border: 2px solid var(--border-main);
+            border-radius: 10px;
+            margin-top: 5px;
+            background: var(--bg-main);
+        }
+
+        #persistent-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: var(--text-btn-primary);
+            background-color: var(--btn-primary-bg);
+            font-size: 16px;
+            font-weight: 500;
+            z-index: 9998;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            opacity: 0;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
+            pointer-events: none;
+        }
+
+        #persistent-toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         @media (max-width: 650px) {
             body {
                 padding: 0;
@@ -794,7 +815,6 @@
                 top: 20px; 
                 right: 20px;
             }
-
             .header {
                 margin-top: 35px; 
             }
@@ -869,7 +889,6 @@
             <h1 class="title">🇰🇷 간편 한글화 번역기</h1>
             <p class="subtitle">무단 전재 및 상업적 이용 금지</p>
         </div>
-
         
         <div class="section">
             <div class="section-title-container">
@@ -882,7 +901,7 @@
             <div class="settings-grid">
                 <div class="input-group">
                     <label for="sourceLanguage">번역할 언어</label>
-                    <select id="sourceLanguage" onchange="updateLanguageLabels(); loadSelectedPrompt(); localStorage.setItem('sourceLanguage', this.value);">                     
+                    <select id="sourceLanguage" onchange="updateLanguageLabels(); loadSelectedPrompt();">                    
                         <option value="chinese">🇨🇳 중국어 → 한국어</option>
                         <!-- <option value="english">🇺🇸 영어 → 한국어 (업데이트 예정)</option>
                         <option value="japanese">🇯🇵 일본어 → 한국어 (업데이트 예정)</option>
@@ -891,20 +910,16 @@
                 </div>
                 <div class="input-group">
                     <label for="apiProvider">API 제공자</label>
-                    <select id="apiProvider"  onchange="localStorage.setItem('apiProvider', this.value);">
+                    <select id="apiProvider">
                         <option value="gemini">Google Gemini</option>
                     </select>
                 </div>
                 <div class="input-group">
                     <label for="apiModel">모델 선택</label>
-                    <select id="apiModel" onchange="testConnection(); localStorage.setItem('apiModel', this.value);">
+                    <select id="apiModel" onchange="handleModelChange(this.value)">
                         <option value="gemini-2.5-pro">gemini-2.5-pro</option>
                         <option value="gemini-2.5-flash">gemini-2.5-flash</option>
                         <option value="gemini-2.0-flash">gemini-2.0-flash</option>
-                        <option value="gemini-2.0-flash-001">gemini-2.0-flash-001</option>
-                        <option value="gemini-1.5-pro-latest">gemini-1.5-pro-latest</option>
-                        <option value="gemini-1.5-flash-latest">gemini-1.5-flash-latest</option>
-                        <option value="gemini-pro">gemini-pro</option>
                     </select>
                 </div>
                 <div class="input-group">
@@ -915,9 +930,35 @@
                         <div id="connectionStatus" class="connection-status status-disconnected">연결되지 않음</div>
                     </div>
                 </div>
+                <div class="input-group" style="grid-column: 1 / -1;">
+                    <div class="settings-inline" style="justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                         <button class="btn-text-like" onclick="toggleAdvancedSettings()">
+                            <i data-feather="sliders"></i> 고급 파라미터 설정
+                        </button>
+                    </div>
+                    <div id="advancedSettingsPanel" style="display: none;">
+                        <div class="settings-grid">
+                             <div class="input-group">
+                                <label for="temperature">온도 (Temperature)</label>
+                                <input type="number" id="temperature" step="0.01" min="0" max="2" value="1">
+                            </div>
+                            <div class="input-group">
+                                <label for="maxOutputTokens">최대 출력 토큰</label>
+                                <input type="number" id="maxOutputTokens" step="1" min="1" value="65536">
+                            </div>
+                            <div class="input-group">
+                                <label for="topP">Top P</label>
+                                <input type="number" id="topP" step="0.01" min="0" max="1" value="0.98">
+                            </div>
+                            <div class="input-group">
+                                <label for="topK">Top K</label>
+                                <input type="number" id="topK" step="1" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
         
         <div class="section">
             <div class="section-title"><i data-feather="align-left"></i> 번역 프롬프트</div>
@@ -947,18 +988,18 @@
                 <button class="btn btn-success btn-small" onclick="deletePrompt()" title="선택된 프롬프트 삭제"><i data-feather="trash"></i> 삭제</button>
             </div>
         </div>
-
         
         <div class="section">
-            <div class="section-title"><i data-feather="type"></i> 입력 텍스트</div>
+            <div class="section-title-container" id="input-text-header">
+                <div class="section-title"><i data-feather="type"></i> 입력 텍스트</div>
+            </div>
             <div class="input-group">
                 <div class="inputText-container">
-                    
                     <label for="inputText" id="input-text-label">중국어 → 한국어</label>
                     <button class="btn-text-like" onclick="clearInputText()">비우기</button>
                 </div>
                 
-                <textarea id="inputText" class="textarea-large" placeholder="텍스트나 코드를 입력하세요..." oninput="updateReplaceButtonState(); updateInputTextLabel();"></textarea>
+                <textarea id="inputText" class="textarea-large" placeholder="텍스트나 코드를 입력하세요..." oninput="handleInputTextChange()"></textarea>
             </div>
             <div class="button-group">
                 <label for="fileInput" class="file-label"><i data-feather="folder"></i> 파일 선택 (txt, json, jsonl, html, css)</label>
@@ -967,7 +1008,6 @@
                 <button class="btn btn-primary" onclick="extractChinese()" id="extractBtn"><i data-feather="mouse-pointer"></i> 중국어 추출</button>
             </div>
         </div>
-
         
         <div class="section">
             <div class="section-title" id="extracted-text-title"><i data-feather="file-text"></i> 추출된 텍스트</div>
@@ -984,23 +1024,24 @@
                 <strong>추출 결과:</strong> <span id="extractCount">0</span>개의 <span id="languageType">중국어</span> 문자열이 발견되었습니다.
             </div>
         </div>
-
         
         <div class="section">
-            <div class="section-title"><i data-feather="edit-3"></i> 번역 결과</div>
+            <div class="section-title-container" id="translation-result-header">
+                <div class="section-title"><i data-feather="edit-3"></i> 번역 결과</div>
+            </div>
             <div class="input-group">
-                <textarea id="translationResult" class="textarea-medium" placeholder="번역 결과가 여기에 표시됩니다..." oninput="updateReplaceButtonState(); updateTranslationStatsFromTextarea();"></textarea>
+                <textarea id="translationResult" class="textarea-medium" placeholder="번역 결과가 여기에 표시됩니다..." oninput="updateReplaceButtonState(); updateTranslationStatsFromTextarea(); toggleSpecialCharCheckButtonVisibility();"></textarea>
             </div>
             <div class="action-button-container button-group"> 
                 <button class="btn btn-primary" onclick="replaceText()" disabled><i data-feather="mouse-pointer"></i> 일괄 변환</button>
                 <button class="btn btn-success btn-small" onclick="importTranslationPairs()"><i data-feather="log-in"></i> 불러오기 (txt, json)</button>
                 <button class="btn btn-success btn-small" onclick="exportTranslationPairs()"><i data-feather="log-out"></i> 내보내기 (txt)</button>
+                <button class="btn btn-success btn-small" onclick="validateSpecialCharacters()" id="validateSpecialCharsBtn" style="display: none;"><i data-feather="check-square"></i> 특수문자 검사</button>
             </div>
             <div id="translationStats" class="result-stats" style="display: none;">
                 <strong>번역 결과:</strong> <span id="translationCount">0</span>개의 문자열 쌍이 번역되었습니다.
             </div>
         </div>
-
         
         <div class="section section-title-last">
             <div class="section-title-container" id="final-text-header"> 
@@ -1020,34 +1061,57 @@
         </div>
     </div>
     <div id="toast-container"></div>
+    <div id="persistent-toast"></div> 
     <script src="https://unpkg.com/feather-icons"></script>
     <script>
         let extractedChineseArray = [];
-        let translationPairs = new Map();
         let currentLogData = [];
         let currentFileName = '';
         let currentFileExtension = '';
 
+        const labels = {
+            'chinese': '중국어',
+            'english': '영어',
+            'japanese': '일본어',
+            'korean': '한국어'
+        };
+
         const DEFAULT_PROMPTS = {
-            'chinese': 'You are a specialized translation engine integrated into a software localization pipeline. Your primary task is to translate Chinese text fragments into natural Korean. Your output is processed by an automated script, so precision is paramount.\n\n**CRITICAL INSTRUCTIONS - FAILURE TO FOLLOW WILL BREAK THE SCRIPT:**\n\n1.  **Output Format is Absolute:** Return ONLY key-value pairs in the format: `original_chinese=translated_korean`. One pair per line. Do not include ANY headers, explanations, or conversational text.\n\n2.  **Preserve ALL Non-Chinese Elements:** You MUST preserve all non-Chinese elements EXACTLY as they appear. This includes:\n    *   **Punctuation & Symbols:** `。`, `！`, `？`, `「」`, `()`, `[]`, `…`, `(1/1)` etc., must remain identical. Do not \"fix\" or convert them.\n    *   **Formatting & Placeholders:** Escape sequences like `\\n`, `\\t`, and placeholders like `%s`, `{0}` must be kept in their exact position.\n    *   **English Text, Numbers, Emojis:** Leave them completely unchanged.\n\n3.  **Translate Fragments Contextually:** The input text may be a fragment of a larger sentence. Use context from adjacent lines for a natural translation, but YOU MUST NOT MERGE OR SPLIT LINES. Each input line corresponds to exactly one output line.\n\n4.  **Maintain Translation Consistency:** If a specific Chinese term appears multiple times, you MUST translate it into the same Korean word throughout the entire request. For example, if you translate \"字体\" as \"글꼴\", you must not translate it as \"폰트\" later.\n\n5.  **Use the Mandatory Terminology Glossary:** For the following specific terms, you MUST use the provided Korean translation. This rule overrides any other translation choice.\n\n    [--- EDIT THIS GLOSSARY SECTION AS NEEDED ---]\n    prompt → 프롬프트\n    tavern, sillytavern → 실리태번\n    world book, world info → 월드인포\n    character, 角色 → 캐릭터\n    [--- END OF GLOSSARY ---]\n\n**Your goal is perfect, clean, and reliable translation for automated processing. Any deviation will cause a fatal script error.**\n\n**Examples of PERFECT output:**\n\n*   Example 1 (Fragments & `\\n`):\n    *   Input: 请选择一个\\\\n你想去的地方\\\n    *   Correct Output: 请选择一个\\\\n你想去的地方\\=하나를 선택해 주세요\\\\n가고 싶은 장소를\\\n\n    *   Input: (仅格式化显示/提示词\n    *   Correct Output: (仅格式化显示/提示词=(서식 지정 표시/프롬프트만\n\n*   Example 2 (Glossary & Punctuation):\n    *   Input: `请选择一个 character。\n    *   Correct Output: `请选择一个 character。=`캐릭터를 한 명 선택해 주세요。\n    *   Input: `编辑角色`\n    *   Correct Output: `编辑角色`=`캐릭터 편집`\n\n*   Example 3 (Unmatched Bracket & Placeholder):\n    *   Input: [Error] 无法找到文件 %s\n    *   Correct Output: [Error] 无法找到文件 %s=[Error] 파일을 찾을 수 없습니다 %s\n\n*   Example 4 (Multi lines):\n    *   Input: \n    将选中的${n\n    length}条消息移动到哪一楼之前\n    *   Correct Output:\n    将选中的${n=선택한 ${n\n    length}条消息移动到哪一楼之前=length}개의 메시지를 몇 번째 메시지 앞으로 이동하시겠습니까\n\nNow, translate the following Chinese text fragments into Korean, strictly following all the rules above: ',
+            'chinese': '**[CONTEXT]**\nYou are a translation engine for an automated script. Your task is to perform a 1:1 substitution of Chinese text fragments with their Korean translations. The output will be parsed by a script that replaces the original Chinese text with your translation. This script relies on perfect, character-for-character preservation of all non-Chinese elements.\n\n**[ABSOLUTE GOLDEN RULE - THIS OVERRIDES ALL OTHER INSTRUCTIONS]**\n**DO NOT, under any circumstances, modify, \"fix\", or \"correct\" any punctuation, symbols, placeholders, or formatting.** Your primary goal is structural preservation, which is more important than linguistic naturalness. Treat these elements like code that must be copied perfectly.\n\n*   **Punctuation & Symbols:** Chinese punctuation like `。`, `！`, `？`, `：`, `「」` MUST remain identical. **DO NOT change `。` to `.` or `：` to `:`**.\n*   **Formatting & Placeholders:** `\\n`, `%s`, `{0}`, etc., MUST be kept in their exact positions.\n*   **Other Text:** English text, numbers, emojis MUST be left unchanged.\n\n**[OUTPUT FORMAT]**\n*   Return ONLY key-value pairs: `original_chinese=translated_korean`.\n*   One pair per line.\n*   NO headers, explanations, or conversational text. Any extra text will cause a fatal script error.\n\n**[TRANSLATION RULES]**\n1.  **1:1 Line Mapping:** Each input line must correspond to exactly one output line. DO NOT merge or split lines, even if it seems more natural.\n2.  **Contextual Translation:** Use adjacent lines for context to ensure the fragment translation is natural *within its given structure*, but do not alter the structure itself.\n3.  **Consistency:** Translate a specific Chinese term into the same Korean word throughout the request. (e.g., if \"字体\" is \"글꼴\", it must always be \"글꼴\").\n4.  **Glossary:** You MUST use the provided Korean translations for these terms:\n    [--- GLOSSARY ---]\n    prompt → 프롬프트\n    tavern, sillytavern → 실리태번\n    world book, world info → 월드인포\n    character, 角色 → 캐릭터\n    [--- END OF GLOSSARY ---]\n5. Proper Nouns: Translate Chinese names phonetically into Korean. You must maintain strict consistency; the same Chinese name must always be translated into the exact same Korean spelling. (e.g., 张伟 → 장웨이)\n\n**[Examples of PERFECT output]**\n*   Example 1 (Punctuation & Fragments):\n    *   Input: `请选择一个 character。\n    *   Correct Output: `请选择一个 character。=`캐릭터를 한 명 선택해 주세요。\n    *   **WRONG Output:** `请选择一个 character。=캐릭터를 한 명 선택해 주세요.` (The \"。\" was incorrectly changed to \".\", and the location of \"`\" is changed)\n\n    *   Input: 请选择一个\\\\n你想去的地方\\\n    *   Correct Output: 请选择一个\\\\n你想去的地方\\=하나를 선택해 주세요\\\\n가고 싶은 장소를\\\n    *   **WRONG Output:** 请选择一个\\n你想去的地方=하나를 선택해 주세요\\n가고 싶은 장소를 (The \"\\\\n\" was not supposed to be fixed)\n\n    *   Input: (仅格式化显示/提示词\n    *   Correct Output: (仅格式化显示/提示词=(서식 지정 표시/프롬프트만\n    *   **WRONG Output:** (仅格式化显示/提示词=(서식 지정 표시/프롬프트만)\n\n*   Example 2 (Placeholder):\n    *   Input: [Error] 无法找到文件 %s\n    *   Correct Output: [Error] 无法找到文件 %s=[Error] 파일을 찾을 수 없습니다 %s\n    *   **WRONG Output:** [Error] 无法找到文件 %s=[Error] 파일을 찾을 수 없습니다. (The \"%s\" was not supposed to be fixed, and \".\" was not supposed to be added)\n\n*   Example 3 (Multi-lines):\n    *   Input:\n    将选中的${n\n    length}条消息移动到哪一楼之前\n    *   Correct Output:\n    将选中的${n=선택한 ${n\n    length}条消息移动到哪一楼之前=length}개의 메시지를 몇 번째 메시지 앞으로 이동하시겠습니까\n\n**주의: `。`, `：` 와 같은 중국어 문장 부호는 절대로 한국어 `.`이나 `:`으로 바꾸지 마세요. 입력에 있는 그대로 출력에 포함해야 합니다. 이 규칙은 번역의 자연스러움보다 중요합니다.**\n\nNow, translate the following Chinese text fragments into Korean, strictly following all the rules above: ',
             'english': 'Please translate the English text fragments into Korean. Keep formatting and return as: original_english=translated_korean',
             'japanese': 'Please translate the Japanese text fragments into Korean. Convert Japanese punctuation to Korean equivalents. Return as: original_japanese=translated_korean',
             'korean': 'Please translate the Korean text fragments into the target foreign language. Return as: original_korean=translated_target'
         };
 
-        
+        const LOW_SPEC_MODELS = {
+            // '모델 이름': { maxOutput: 최대출력토큰, safeInputChars: 안전한입력글자수 }
+            'gemini-2.0-flash': { maxOutput: 8192, safeInputChars: 3000 },
+            'gemini-2.0-flash-001': { maxOutput: 8192, safeInputChars: 3000 },
+        };
+
+        const DEFAULT_MAX_OUTPUT = 65536;
+  
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('apiKey').value = localStorage.getItem('apiKey') || '';
             document.getElementById('sourceLanguage').value = localStorage.getItem('sourceLanguage') || 'chinese';
             document.getElementById('apiProvider').value = localStorage.getItem('apiProvider') || 'gemini';
             document.getElementById('apiModel').value = localStorage.getItem('apiModel') || 'gemini-2.5-pro';
+            const initialModel = document.getElementById('apiModel').value;
+            if (LOW_SPEC_MODELS.hasOwnProperty(initialModel)) {
+                document.getElementById('maxOutputTokens').value = LOW_SPEC_MODELS[initialModel].maxOutput;
+            } else {
+                document.getElementById('maxOutputTokens').value = localStorage.getItem('maxOutputTokens') || DEFAULT_MAX_OUTPUT;
+            }
+            document.getElementById('temperature').value = localStorage.getItem('temperature') || '0.8';
+            document.getElementById('maxOutputTokens').value = localStorage.getItem('maxOutputTokens') || '65536';
+            document.getElementById('topP').value = localStorage.getItem('topP') || '0.98';
+            document.getElementById('topK').value = localStorage.getItem('topK') || '0';
+
             updateLanguageLabels();
             updatePromptSelect(); 
             
-            
             const savedPrompt = localStorage.getItem('selectedPrompt');
             const promptSelect = document.getElementById('promptSelect');
-            
             
             if (savedPrompt && promptSelect.querySelector(`option[value="${savedPrompt}"]`)) {
                 promptSelect.value = savedPrompt;
@@ -1058,15 +1122,58 @@
             if (document.getElementById('apiKey').value) {
                 testConnection();
             }
+            
+            const settingsToWatch = [
+                'sourceLanguage', 'apiProvider', 'apiModel', 'apiKey', 'promptSelect',
+                'temperature', 'maxOutputTokens', 'topP', 'topK'
+            ];
+            settingsToWatch.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', saveAllSettingsToStorage);
+                }
+            });
+
+            handleModelChange(initialModel);
         });
 
-        /*
-         * 토스트 알림을 표시하는 함수
-         * @param {string} message - 표시할 메시지
-         * @param {string} type - 'success', 'error', 'info' 중 하나
-         */
-        function showToast(message, type = 'info') {
+        function saveAllSettingsToStorage() {
+            localStorage.setItem('apiKey', document.getElementById('apiKey').value);
+            localStorage.setItem('sourceLanguage', document.getElementById('sourceLanguage').value);
+            localStorage.setItem('apiProvider', document.getElementById('apiProvider').value);
+            localStorage.setItem('apiModel', document.getElementById('apiModel').value);
+            localStorage.setItem('selectedPrompt', document.getElementById('promptSelect').value);
             
+            localStorage.setItem('temperature', document.getElementById('temperature').value);
+            localStorage.setItem('maxOutputTokens', document.getElementById('maxOutputTokens').value);
+            localStorage.setItem('topP', document.getElementById('topP').value);
+            localStorage.setItem('topK', document.getElementById('topK').value);
+        }
+
+        function toggleAdvancedSettings() {
+            const panel = document.getElementById('advancedSettingsPanel');
+            const isVisible = panel.style.display === 'block';
+            panel.style.display = isVisible ? 'none' : 'block';
+        }
+
+        /**
+         * @param {string} message - 표시할 메시지
+         * @param {string} type - 'success', 'error', 'info' 또는 'persistent'
+         * @param {boolean} forceClose - (persistent 전용) 강제로 닫을지 여부
+         */
+        function showToast(message, type = 'info', forceClose = false) {
+
+            const persistentToast = document.getElementById('persistent-toast');
+            if (type === 'persistent') {
+                if (forceClose) {
+                    persistentToast.classList.remove('show');
+                } else {
+                    persistentToast.textContent = message;
+                    persistentToast.classList.add('show');
+                }
+                return;
+            }
+
             const container = document.getElementById('toast-container');
             if (!container) return; 
 
@@ -1075,20 +1182,24 @@
             toast.textContent = message;
             container.appendChild(toast);
             
-            
             setTimeout(() => {
                 toast.classList.add('show');
             }, 100);
 
-            
             setTimeout(() => {
                 toast.classList.remove('show');
-                
                 toast.addEventListener('transitionend', () => toast.remove());
-            }, 3000);
+            }, 5000);
         }
 
-        
+        function toggleSpecialCharCheckButtonVisibility() {
+            const translationResult = document.getElementById('translationResult').value;
+            const validateBtn = document.getElementById('validateSpecialCharsBtn');
+            if (validateBtn) {
+                validateBtn.style.display = translationResult.trim() ? 'inline-block' : 'none';
+            }
+        }
+
         function clearInputText() {
             if (confirm("입력창의 모든 내용을 지우시겠습니까?")) {
                 document.getElementById('inputText').value = '';
@@ -1105,20 +1216,12 @@
             const punctuationBtn = document.getElementById('punctuationBtn');
             const languageType = document.getElementById('languageType');
             const extractBtn = document.getElementById('extractBtn'); 
-
-            const labels = {
-                'chinese': '중국어',
-                'english': '영어',
-                'japanese': '일본어',
-                'korean': '한국어'
-            };
             
             const targetLang = sourceLanguage === 'korean' ? '외국어' : '한국어';
 
             if (inputLabel) {
                 inputLabel.textContent = `${labels[sourceLanguage]} → ${targetLang}`;
             }
-            
             
             if (extractBtn) {
                 
@@ -1142,7 +1245,6 @@
             } else {
                 punctuationBtn.style.display = 'none';
             }
-            
             
             feather.replace();
             updateInputTextLabel();
@@ -1256,17 +1358,14 @@
                                 throw new Error('파일 형식이 올바르지 않습니다. "name"과 "prompt" 속성이 필요합니다.');
                             }
 
-                            
                             const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '{}');
                             let newName = name;
                             let counter = 1;
-                            
                             
                             while (savedPrompts[newName]) {
                                 newName = `${name} (${counter})`;
                                 counter++;
                             }
-                            
                             
                             savedPrompts[newName] = prompt;
                             localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
@@ -1274,7 +1373,6 @@
                             updatePromptSelect();
                             document.getElementById('promptSelect').value = newName;
                             loadSelectedPrompt(); 
-                            
                             
                             if (newName !== name) {
                                 showToast(`'${name}' 프롬프트는 이미 존재하여 '${newName}'으로 저장했습니다.`, 'info');
@@ -1292,7 +1390,6 @@
             input.click();
         }
 
-        
         function updateReplaceButtonState() {
             const inputText = document.getElementById('inputText').value;
             const translationResult = document.getElementById('translationResult').value;
@@ -1302,81 +1399,183 @@
             replaceBtn.disabled = !(inputText.trim() && translationResult.trim());
         }
 
+        function chunkArray(array, chunkSize) {
+            const chunks = [];
+            for (let i = 0; i < array.length; i += chunkSize) {
+                chunks.push(array.slice(i, i + chunkSize));
+            }
+            return chunks;
+        }
+
+        function getGenerationConfig() {
+            return {
+                temperature: parseFloat(document.getElementById('temperature').value),
+                maxOutputTokens: parseInt(document.getElementById('maxOutputTokens').value),
+                topP: parseFloat(document.getElementById('topP').value),
+                topK: parseInt(document.getElementById('topK').value),
+            };
+        }
+
+        function handleModelChange(selectedModel) {
+            const maxOutputTokensInput = document.getElementById('maxOutputTokens');
+            const isLowSpec = LOW_SPEC_MODELS.hasOwnProperty(selectedModel);
+
+            if (isLowSpec) {
+                const spec = LOW_SPEC_MODELS[selectedModel];
+                
+                maxOutputTokensInput.value = spec.maxOutput;
+
+                showToast(`'${selectedModel}'은 최대 출력이 ${spec.maxOutput} 토큰으로 제한됩니다. 번역 요청이 자동으로 분할됩니다.`, 'info');
+
+            } else {
+                const savedValue = localStorage.getItem('maxOutputTokens');
+                maxOutputTokensInput.value = savedValue && !LOW_SPEC_MODELS.hasOwnProperty(localStorage.getItem('apiModel')) ? savedValue : DEFAULT_MAX_OUTPUT;
+            }
+
+            localStorage.setItem('apiModel', selectedModel);
+            const statusElement = document.getElementById('connectionStatus');
+            if (statusElement.classList.contains('status-connected')) {
+                statusElement.textContent = `연결 성공 (${selectedModel})`;
+            }
+        }
+
+        function chunkLinesByCharLimit(lines, maxChars) {
+            if (lines.join('\n').length <= maxChars) {
+                return [lines];
+            }
+
+            const chunks = [];
+            let currentChunk = [];
+            let currentChars = 0;
+
+            lines.forEach(line => {
+                const lineLength = line.length + 1;
+
+                if (lineLength > maxChars) {
+                    if (currentChunk.length > 0) {
+                        chunks.push(currentChunk);
+                        currentChunk = [];
+                        currentChars = 0;
+                    }
+                    chunks.push([line]);
+                    console.warn(`[번역 경고] 한 줄의 길이가 ${line.length}자로 너무 깁니다. 이 부분에서 번역 오류가 발생할 수 있습니다.`);
+                    return;
+                }
+
+                if (currentChars + lineLength > maxChars) {
+                    chunks.push(currentChunk);
+                    currentChunk = [line];
+                    currentChars = lineLength;
+                } else {
+                    currentChunk.push(line);
+                    currentChars += lineLength;
+                }
+            });
+            
+            if (currentChunk.length > 0) {
+                chunks.push(currentChunk);
+            }
+
+            return chunks;
+        }
+
         async function translateText() {
             const apiKey = document.getElementById('apiKey').value;
-            let model = document.getElementById('apiModel').value;
+            const model = document.getElementById('apiModel').value;
             const prompt = document.getElementById('translationPrompt').value;
-            
+
             if (!apiKey) {
-                alert('API 키를 입력해주세요.');
+                showToast('API 키를 입력해주세요.', 'error');
                 return;
             }
-
             if (extractedChineseArray.length === 0) {
-                const langName = (typeof labels !== 'undefined' && labels[document.getElementById('sourceLanguage').value]) ? labels[document.getElementById('sourceLanguage').value] : '외국어';
-                showToast(`${langName}를 먼저 추출해주세요.`);
+                const langName = labels[document.getElementById('sourceLanguage').value] || '외국어';
+                showToast(`${langName}를 먼저 추출해주세요.`, 'info');
                 return;
             }
 
-            if (model.endsWith('-latest')) {
-                model = model.slice(0, -7);
-            }
-            
             const progressBar = document.getElementById('progressBar');
             const progressFill = document.getElementById('progressFill');
+            const translationResultTextarea = document.getElementById('translationResult');
+            
             progressBar.style.display = 'block';
             progressFill.style.width = '0%';
-            
+            translationResultTextarea.value = '';
+            translationResultTextarea.disabled = true;
+
             try {
-                const textToTranslate = extractedChineseArray.join('\n');
-                const fullPrompt = prompt + '\n\n' + textToTranslate;
-                
-                const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-                
-                progressFill.style.width = '50%';
-                
-                const response = await fetch(apiEndpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: fullPrompt }] }]
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API 요청 실패: ${response.statusText}`);
+                const promptLength = (prompt || '').length;
+                let charLimit = 15000;
+                if (LOW_SPEC_MODELS.hasOwnProperty(model)) {
+                    charLimit = LOW_SPEC_MODELS[model].safeInputChars;
                 }
-                
-                const data = await response.json();
-                const translatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                
-                progressFill.style.width = '100%';
-                
-                
-                translationPairs.clear();
-                const lines = translatedText.split('\n').filter(line => line.includes('='));
-                
-                lines.forEach(line => {
-                    const [original, translated] = line.split('=', 2);
-                    if (original && translated) {
-                        translationPairs.set(original.trim(), translated.trim());
+                const effectiveCharLimit = charLimit - promptLength - 300;
+
+                const chunks = chunkLinesByCharLimit(extractedChineseArray, effectiveCharLimit);
+                const totalChunks = chunks.length;
+
+                for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
+                    const chunkLines = chunks[chunkIndex];
+                    const textToTranslate = chunkLines.join('\n');
+                    const fullPrompt = prompt + '\n\n' + textToTranslate;
+                                        
+                    if (totalChunks > 1) {
+                        showToast(`번역 중... (${chunkIndex + 1}/${totalChunks}번째 요청)`, 'persistent');
+                    } else {
+                        showToast('번역 중...', 'persistent');
                     }
-                });
-                
-                document.getElementById('translationResult').value = translatedText;
+
+                    const startProgress = ((chunkIndex + 0.5) / totalChunks) * 100;
+                    progressFill.style.width = `${startProgress}%`;
+
+                    const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: fullPrompt }] }],
+                            generationConfig: getGenerationConfig()
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        const errorMessage = errorData.error?.message || response.statusText;
+                        throw new Error(`API 오류 (요청 ${chunkIndex + 1}/${totalChunks}): ${errorMessage}`);
+                    }
+
+                    const data = await response.json();
+                    const translatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                    
+                    translationResultTextarea.value += translatedText;
+                    
+                    if (chunkIndex < totalChunks - 1) {
+                        translationResultTextarea.value += '\n';
+                    }
+                    translationResultTextarea.scrollTop = translationResultTextarea.scrollHeight;
+
+                    const endProgress = ((chunkIndex + 1) / totalChunks) * 100;
+                    progressFill.style.width = `${endProgress}%`;
+                }
+
                 updateTranslationStatsFromTextarea();
-                
                 updateReplaceButtonState();
                 
-                setTimeout(() => {
-                    progressBar.style.display = 'none';
-                }, 1000);
+                setTimeout(() => { progressBar.style.display = 'none'; }, 1000);
+                showToast('', 'persistent', true); 
                 
-                showToast(`${translationPairs.size}개 항목이 번역되었습니다.`);
-                
+                const finalPairCount = translationResultTextarea.value.split('\n').filter(line => line.includes('=')).length;
+                showToast(`총 ${finalPairCount}개 항목이 번역되었습니다.`, 'success');
+                toggleSpecialCharCheckButtonVisibility();
+
             } catch (error) {
                 progressBar.style.display = 'none';
-                showToast(`번역 중 오류 발생: ${error.message}`);
+                showToast('', 'persistent', true);
+                showToast(`${error.message}`, 'error');
+                console.error(error);
+            } finally {
+                translationResultTextarea.disabled = false;
             }
         }
 
@@ -1388,44 +1587,61 @@
             const inputText = document.getElementById('inputText').value;
             const translationResultText = document.getElementById('translationResult').value;
 
-            
             if (!inputText.trim()) {
                 alert('변환할 내용이 있는 "입력 텍스트" 창을 먼저 채워주세요.');
                 return;
             }
-
             
-            if (translationPairs.size === 0 && translationResultText.trim()) {
-                if (!confirm('LLM 번역이 실행되지 않았습니다. 현재 "번역 결과" 창에 직접 입력된 내용으로 변환을 진행하시겠습니까?')) {
-                    return; 
+            if (translationResultText.trim()) {
+                const hasBeenTranslatedViaApi = extractedChineseArray.length > 0; 
+                if (!hasBeenTranslatedViaApi) {
+                    if (!confirm('LLM 번역이 실행되지 않았습니다. 현재 "번역 결과" 창에 직접 입력된 내용으로 변환을 진행하시겠습니까?')) {
+                        return;
+                    } 
                 }
             }
 
-            
             if (!translationResultText.trim()) {
                 alert('"번역 결과" 창이 비어있어 변환을 진행할 수 없습니다. 번역을 실행하거나, "원본=번역" 형식으로 내용을 직접 입력해주세요.');
                 return;
             }
-
             
             const lines = translationResultText.split('\n');
             const allPairs = [];
+            let ignoreFormatErrors = false; // 사용자가 오류를 무시하기로 했는지 확인하는 플래그
+            let skippedLines = 0; // 건너뛴 라인 수를 세는 카운터
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (line === '') continue; 
 
                 const equalIndex = line.indexOf('=');
-                if (equalIndex === -1) {
+                // '='가 없거나, '=' 뒤에 공백을 제외한 내용이 없는 경우를 오류로 간주
+                const isInvalidPair = equalIndex === -1 || line.substring(equalIndex + 1).trim().length === 0;
+
+                if (isInvalidPair) {
+                    skippedLines++;
+                    if (!ignoreFormatErrors) {
+                        const proceed = confirm(
+                            `오류: "번역 결과" 창의 ${i + 1}번째 줄 형식이 올바르지 않습니다.\n\n[내용]\n${line}\n\n"원본=번역" 형식이 아니거나 번역 내용이 비어있습니다. 이 줄과 이후의 모든 형식 오류를 무시하고 변환을 계속하시겠습니까?`
+                        );
+
+                        if (proceed) {
+                            ignoreFormatErrors = true;
+                            console.warn(`[일괄 변환 경고] 사용자가 형식 오류를 무시하기로 선택했습니다. ${i + 1}번째 줄을 건너뜁니다: "${line}"`);
+                            continue;
+                        } else {
+                            showToast('형식 오류로 인해 변환이 중단되었습니다.', 'error');
+                            return;
+                        }
+                    } else {
+                        console.warn(`[일괄 변환 경고] 형식 오류가 있는 ${i + 1}번째 줄을 건너뜁니다: "${line}"`);
+                        continue;
+                    }
+                
+                    const original = line.substring(0, equalIndex);
+                    const translation = line.substring(equalIndex + 1);
                     
-                    alert(`오류: "번역 결과" 창의 ${i + 1}번째 줄 형식이 올바르지 않습니다.\n\n[내용]\n${line}\n\n"원본=번역" 형식으로 수정 후 다시 시도해주세요.`);
-                    return;
-                }
-                
-                const original = line.substring(0, equalIndex);
-                const translation = line.substring(equalIndex + 1);
-                
-                if (original && translation) {
                     allPairs.push({
                         original: original,
                         translation: translation,
@@ -1434,17 +1650,21 @@
                 }
             }
 
+            if (skippedLines > 0 && !ignoreFormatErrors) {
+            } else if (skippedLines > 0 && ignoreFormatErrors) {
+                showToast(`${skippedLines}개의 라인이 형식이 맞지 않아 변환에서 제외되었습니다.`, 'info');
+            }
+
             if (allPairs.length === 0) {
                 alert('변환에 사용할 유효한 번역 쌍을 찾지 못했습니다.');
                 return;
             }
 
-            
+            // 길이를 기준으로 내림차순 정렬. 가장 긴 것부터 변환해야 중첩 오류 방지
             allPairs.sort((a, b) => b.length - a.length);
-
             
             let result = inputText;
-            const processedRanges = []; 
+            const processedRanges = []; // 변환된 영역을 기록할 배열
             let replacementCount = 0; 
 
             allPairs.forEach(pair => {
@@ -1456,6 +1676,7 @@
                     
                     const foundEnd = foundIndex + pair.original.length;
                     
+                    // 찾은 영역이 이전에 변환된 영역과 겹치는지 확인
                     const isOverlapping = processedRanges.some(range => 
                         (foundIndex < range.end && foundEnd > range.start)
                     );
@@ -1470,11 +1691,13 @@
 
                         const lengthDiff = pair.translation.length - pair.original.length;
                         
+                        // 변환된 영역 정보를 기록
                         processedRanges.push({
                             start: foundIndex,
                             end: foundIndex + pair.translation.length
                         });
                         
+                        // 이후에 처리될 영역들의 위치를 바뀐 길이만큼 조정
                         processedRanges.forEach(range => {
                             if (range.start > foundIndex) {
                                 range.start += lengthDiff;
@@ -1494,13 +1717,36 @@
             if (replacementCount > 0) {
                 showToast(`${replacementCount}개 항목의 일괄 변환이 완료되었습니다.`, 'success');
 
-                
                 const finalResultText = document.getElementById('finalResult').value;
                 const remainingChinese = finalResultText.match(/[\u4e00-\u9fff]+/g) || [];
                 const pairsCount = allPairs.length;
                 
+                const targetContainer = document.getElementById('final-text-header');
+                const remainingList = remainingChinese.length > 0
+                    ? remainingChinese.map(c => `<code>"${c}"</code>`).join(', ')
+                    : '없음';
                 
-                setupLogButton(pairsCount, replacementCount, remainingChinese);
+                const summaryHTML = `
+                    <div style="padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-size: 11px; color: #ccc;">
+                        <p style="margin: 0 0 4px;"><strong>요약:</strong></p>
+                        <p style="margin: 0 0 2px;">- 사용된 변환 쌍: ${pairsCount}개</p>
+                        <p style="margin: 0 0 2px;">- 총 변환 횟수: ${replacementCount}회</p>
+                        <p style="margin: 0;">- 미변환 중국어: ${remainingList}</p>
+                    </div>
+                `;
+                
+                const logListHTML = currentLogData.map((log, index) => {
+                    const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+                    const parts = log.split('→');
+                    const original = parts[0] ? escapeHtml(parts[0].trim()) : '';
+                    const translated = parts[1] ? escapeHtml(parts[1].trim()) : '';
+                    return `<p style="margin:0 0 2px;"><span style="color: #aaa; width: 2.5em; display: inline-block;">${index + 1}.</span>${original} <span style="color: #888;">→</span> <span style="color: #63e6be;">${translated}</span></p>`;
+                }).join('');
+                
+                const logContentHTML = summaryHTML + logListHTML;
+
+                setupLogButton(targetContainer, logContentHTML, '변환 로그 보기');
+
             } else {
                 showToast('변환할 항목을 찾지 못했습니다.', 'info');
             }
@@ -1540,68 +1786,81 @@
             URL.revokeObjectURL(url);
         }
 
-        
         function saveSettings() {
-                
-                const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '{}');
+            const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '{}');
 
-                const settings = {
-                    sourceLanguage: document.getElementById('sourceLanguage').value, 
-                    apiProvider: document.getElementById('apiProvider').value,
-                    apiModel: document.getElementById('apiModel').value,
-                    apiKey: document.getElementById('apiKey').value,
-                    translationPrompt: document.getElementById('translationPrompt').value,
-                    savedPrompts: savedPrompts 
-                };
-                
-                const dataStr = JSON.stringify(settings, null, 2);
-                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-                
-                const exportFileDefaultName = 'EasyKr_settings.json';
-                
-                const linkElement = document.createElement('a');
-                linkElement.setAttribute('href', dataUri);
-                linkElement.setAttribute('download', exportFileDefaultName);
-                linkElement.click();
-            }
+            const settings = {
 
-            function loadSettings() {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = '.json';
-                input.onchange = function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            try {
-                                const settings = JSON.parse(e.target.result);
-                                
-                                document.getElementById('sourceLanguage').value = settings.sourceLanguage || 'chinese';
-                                document.getElementById('apiProvider').value = settings.apiProvider || 'gemini';
-                                document.getElementById('apiModel').value = settings.apiModel || 'gemini-2.0-flash';
-                                document.getElementById('apiKey').value = settings.apiKey || '';
-                                document.getElementById('translationPrompt').value = settings.translationPrompt || '';
-                                
-                                
-                                if (settings.savedPrompts) {
-                                    localStorage.setItem('savedPrompts', JSON.stringify(settings.savedPrompts));
+                sourceLanguage: document.getElementById('sourceLanguage').value, 
+                apiProvider: document.getElementById('apiProvider').value,
+                apiModel: document.getElementById('apiModel').value,
+                apiKey: document.getElementById('apiKey').value,
+                translationPrompt: document.getElementById('translationPrompt').value,
+                savedPrompts: savedPrompts,
+
+                temperature: document.getElementById('temperature').value,
+                maxOutputTokens: document.getElementById('maxOutputTokens').value,
+                topP: document.getElementById('topP').value,
+                topK: document.getElementById('topK').value,
+            };
+
+            const dataStr = JSON.stringify(settings, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = 'EasyKr_settings.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        function loadSettings() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const settings = JSON.parse(e.target.result);
+                            
+                            document.getElementById('sourceLanguage').value = settings.sourceLanguage || 'chinese';
+                            document.getElementById('apiProvider').value = settings.apiProvider || 'gemini';
+                            document.getElementById('apiModel').value = settings.apiModel || 'gemini-2.5-pro';
+                            document.getElementById('apiKey').value = settings.apiKey || '';
+                            document.getElementById('translationPrompt').value = settings.translationPrompt || '';
+                            
+                            document.getElementById('temperature').value = settings.temperature || '0.8';
+                            document.getElementById('maxOutputTokens').value = settings.maxOutputTokens || '65536';
+                            document.getElementById('topP').value = settings.topP || '0.98';
+                            document.getElementById('topK').value = settings.topK || '0';
+
+                            for (const key in settings) {
+                                if(key !== 'savedPrompts') {
+                                    localStorage.setItem(key, settings[key]);
                                 }
-                                
-                                
-                                updatePromptSelect();
-                                updateLanguageLabels();
-
-                                showToast('설정이 성공적으로 불러와졌습니다!');
-                            } catch (error) {
-                                showToast('설정 파일을 읽는 중 오류가 발생했습니다.');
                             }
-                        };
-                        reader.readAsText(file);
-                    }
-                };
-                input.click();
-            }        
+                            
+                            if (settings.savedPrompts) {
+                                localStorage.setItem('savedPrompts', JSON.stringify(settings.savedPrompts));
+                            }
+                            
+                            updatePromptSelect();
+                            updateLanguageLabels();
+
+                            showToast('설정이 성공적으로 불러와졌습니다!');
+                        } catch (error) {
+                            showToast('설정 파일을 읽는 중 오류가 발생했습니다.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }        
         
         function deletePrompt() {
             const select = document.getElementById('promptSelect');
@@ -1624,14 +1883,11 @@
             resetToDefault();
             showToast('프롬프트가 삭제되었습니다.');
         }
-
         
         function loadFile() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
-            
             if (!file) return;
-            
             
             const fileName = file.name;
             const lastDotIndex = fileName.lastIndexOf('.');
@@ -1643,10 +1899,10 @@
                 document.getElementById('inputText').value = e.target.result;
                 showToast(`파일 "${fileName}"이 성공적으로 로드되었습니다.`);
                 updateInputTextLabel();
+                updateInputAnalysisViewer(); // 함수 이름 변경
             };
             reader.readAsText(file, 'utf-8');
         }
-
         
         async function testConnection() {
             const apiKey = document.getElementById('apiKey').value;
@@ -1660,13 +1916,10 @@
                 showToast('API 키를 입력해주세요.');
                 return;
             }
-
-            localStorage.setItem('apiKey', apiKey);
     
             statusElement.className = 'connection-status status-connecting';
             statusElement.textContent = '연결 중...';
     
-            
             const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}?key=${apiKey}`;
 
             try {
@@ -1681,7 +1934,7 @@
                     const modelInfo = await response.json();
                     statusElement.className = 'connection-status status-connected';
                     statusElement.textContent = `연결 성공 (${modelInfo.displayName || model})`;
-                    showToast('API 연결이 성공했습니다!');
+                    showToast('API 연결에 성공했습니다!');
                 } else {
                     const errorData = await response.json();
                     throw new Error(`API 연결 실패: ${errorData.error?.message || response.statusText}`);
@@ -1692,7 +1945,6 @@
                 showToast(`API 연결에 실패했습니다. API 키와 모델명을 확인해주세요.\n오류: ${error.message}`);
             }
         }
-
         
         function getLanguageRegex(language) {
             const patterns = {
@@ -1716,7 +1968,6 @@
                     extractChineseSegments(content, results);
                 }
                 
-                
                 const commentRegex = /\/\*([^*]*[\u4e00-\u9fff][^*]*)\*\/|\/\/([^\n\r]*[\u4e00-\u9fff][^\n\r]*)/g;
                 while ((match = commentRegex.exec(text)) !== null) {
                     const content = match[1] || match[2];
@@ -1725,13 +1976,11 @@
                     }
                 }
                 
-                
                 const htmlContentRegex = />([^<]*[\u4e00-\u9fff][^<]*)</g;
                 while ((match = htmlContentRegex.exec(text)) !== null) {
                     const content = match[1];
                     extractChineseSegments(content, results);
                 }
-                
                 
                 const lines = text.split(/\n/);
                 lines.forEach(line => {
@@ -1740,7 +1989,6 @@
                     }
                 });
                 
-                
                 let uniqueResults = [...new Set(results)]
                     .filter(text => text.trim().length > 0)
                     .map(text => {
@@ -1748,10 +1996,8 @@
                         return text.replace(/^[`'"'"'"「」『』（）【】〈〉《》〔〕〖〗]+|[`'"'"'"「」『』（）【】〈〉《》〔〕〖〗]+$/g, '');
                     })
                     .filter(text => text.length > 0);
-
                 
                 uniqueResults = [...new Set(uniqueResults)];
-                
                 return uniqueResults;
 
             } else {
@@ -1765,7 +2011,6 @@
         function extractChineseSegments(text, results) {
             if (!text) return;
 
-            
             const longSegmentRegex = /[a-zA-Z0-9${}*]*[\u4e00-\u9fff][\u4e00-\u9fff\s\u3000-\u303f\uff00-\uffef。！？，、：；""「」『』（）【】〈〉《》〔〕〖〗""''…—～·\-_()\/\\&＆@*↔️➡️⬅️⬆️⬇️🔄📁💾🗑️✅📋✨🔧⚙️📝🇨🇳🇺🇸🇯🇵🇷🇺🇰🇷0-9a-zA-Z${}"`]*[\u4e00-\u9fff][a-zA-Z0-9${}*"`。]*/g;
             let longMatches = text.match(longSegmentRegex) || [];
             let extractedRanges = []; 
@@ -1786,7 +2031,6 @@
                 }
             });
 
-            
             const shortRegex = /[a-zA-Z0-9${}]*[\u4e00-\u9fff]+[a-zA-Z0-9${}]*(?:[。！？，])?/g;
             let match;
             
@@ -1809,6 +2053,19 @@
             }
         }
 
+        function handleInputTextChange() {
+            updateReplaceButtonState();
+            updateInputTextLabel();
+            updateInputAnalysisViewer();
+            
+            document.querySelector('button[onclick="translateText()"]').disabled = true;
+            
+            const extractStats = document.getElementById('extractStats');
+            if (extractStats.style.display === 'block') {
+                extractStats.innerHTML += ' <strong style="color: var(--text-status-connecting);">[원본이 수정되었습니다. 다시 추출해주세요!]</strong>';
+            }
+        }
+
         function extractChinese() {
             const inputText = document.getElementById('inputText').value;
             const selectedLanguage = document.getElementById('sourceLanguage').value;
@@ -1822,12 +2079,10 @@
                 return;
             }
 
-            
             if (extractedChineseEl.value || translationResultEl.value || finalResultEl.value) {
                 if (!confirm("이미 작업 내용이 존재합니다. 추출을 다시 실행하면 아래 창의 내용이 모두 초기화됩니다. 계속하시겠습니까?")) {
                     return; 
                 }
-                
                 
                 extractedChineseEl.value = '';
                 translationResultEl.value = '';
@@ -1841,34 +2096,30 @@
                 extractedChineseArray = [];
                 translationPairs.clear();
             }
-
             
             const extractedResults = extractLanguageSegments(inputText, selectedLanguage);
             if (!extractedResults || extractedResults.length === 0) {
-                
-                const langName = (typeof labels !== 'undefined' && labels[selectedLanguage]) ? labels[selectedLanguage] : '외국어';
+                const langName = labels[selectedLanguage] || '외국어';
                 showToast(`해당 ${langName}가 발견되지 않았습니다.`);
                 return;
             }
 
             extractedChineseArray = extractedResults;
 
-            
             const joinedText = extractedChineseArray.join('');
             const chineseCharCount = (joinedText.match(/[\u4e00-\u9fff]/g) || []).length;
-            
             
             extractedChineseEl.value = extractedChineseArray.join('\n');
             
             const extractStats = document.getElementById('extractStats');
             const languageType = document.getElementById('languageType'); 
             
-            
             extractStats.innerHTML = `<strong>추출 결과:</strong> <span id="languageType">${languageType.textContent}</span> ${chineseCharCount}자, <span id="extractCount">${extractedChineseArray.length}</span>개의 <span id="languageType">${languageType.textContent}</span> 문자열이 발견되었습니다.`;
             extractStats.style.display = 'block';
 
-            
-            document.querySelector('button[onclick="translateText()"]').disabled = false;
+            if (extractedChineseArray.length > 0) {
+                document.querySelector('button[onclick="translateText()"]').disabled = false;
+            }
             
             const langName = (typeof labels !== 'undefined' && labels[selectedLanguage]) ? labels[selectedLanguage] : '외국어';
             showToast(`${extractedChineseArray.length}개의 ${langName} 문자열이 추출되었습니다.`);
@@ -1895,19 +2146,16 @@
             showToast('입력 텍스트의 중국어 문장부호가 변환되었습니다.');
         }
         
-        
         function setTheme(button) {
             const themeName = button.getAttribute('data-theme');
             document.body.setAttribute('data-theme', themeName);
             localStorage.setItem('selectedTheme', themeName);
 
-            
             document.querySelectorAll('.theme-button').forEach(btn => btn.classList.remove('active'));
             
             button.classList.add('active');
         }
 
-        
         function applySavedTheme() {
             const savedTheme = localStorage.getItem('selectedTheme') || 'original-pink'; 
             document.body.setAttribute('data-theme', savedTheme);
@@ -1920,7 +2168,6 @@
                 activeButton.classList.add('active');
             }
         }
-        
         
         function exportTranslationPairs() {
             const text = document.getElementById('translationResult').value;
@@ -1942,7 +2189,6 @@
             const label = document.getElementById('input-text-label');
             const sourceLanguage = document.getElementById('sourceLanguage').value;
 
-            
             const labels = {
                 'chinese': '중국어',
                 'english': '영어',
@@ -1952,9 +2198,7 @@
             const sourceLangName = labels[sourceLanguage] || '외국어';
             const targetLangName = sourceLanguage === 'korean' ? '외국어' : '한국어';
 
-            
             let newLabelText = `${sourceLangName} → ${targetLangName}`;
-
             
             if (inputText.trim() && sourceLanguage === 'chinese') {
                 const chineseCharCount = (inputText.match(/[\u4e00-\u9fff]/g) || []).length;
@@ -1964,7 +2208,6 @@
                     newLabelText = `${sourceLangName} (${chineseCharCount}자) → ${targetLangName}`;
                 }
             }
-            
             
             label.textContent = newLabelText;
         }
@@ -1978,9 +2221,12 @@
                 statsDiv.style.display = 'none';
                 return;
             }
-
             
-            const pairCount = text.split('\n').filter(line => line.includes('=')).length;
+            const pairCount = text.split('\n').filter(line => {
+                const equalIndex = line.indexOf('=');
+                return equalIndex !== -1 && line.substring(equalIndex + 1).trim().length > 0;
+            }).length;
+
 
             if (pairCount > 0) {
                 countSpan.textContent = pairCount;
@@ -1990,7 +2236,6 @@
             }
         }
 
-        
         function importTranslationPairs() {
             const input = document.createElement('input');
             input.type = 'file';
@@ -2026,13 +2271,13 @@
                         document.getElementById('translationResult').value = output;
                         updateReplaceButtonState();
                         updateTranslationStatsFromTextarea();
+                        toggleSpecialCharCheckButtonVisibility();
                     };
                     reader.readAsText(file, 'utf-8');
                 }
             };
             input.click();
         }
-
         
         function validateFinalText() {
             const text = document.getElementById('finalResult').value;
@@ -2046,14 +2291,12 @@
             let warnings = [];
             const lines = text.split('\n');
 
-            
             const chineseChars = text.match(/[\u4e00-\u9fff]/g) || [];
             if (chineseChars.length > 0) {
                 warnings.push(`잔여 중국어 ${chineseChars.length}자 발견: ${chineseChars.slice(0, 10).join('')}...`);
             } else {
                 results.push(`잔여 중국어 없음`);
             }
-
             
             const stack = [];
             const pairs = { '(': ')', '{': '}', '[': ']', '"': '"', "'": "'" };
@@ -2063,7 +2306,6 @@
                 const line = lines[i];
                 for (let j = 0; j < line.length; j++) {
                     const char = line[j];
-                    
                     
                     if (char === '\\' && j + 1 < line.length) {
                         j++;
@@ -2100,17 +2342,14 @@
                 }
             }
             
-            
             for (let i = 0; i < lines.length - 1; i++) {
                 const currentLine = lines[i].trim();
                 const nextLine = lines[i+1].trim();
 
-                
                 if ((currentLine.endsWith('}') || currentLine.endsWith(']') || currentLine.endsWith('"')) && nextLine.startsWith('"') && !currentLine.endsWith(',')) {
                     warnings.push(`${i + 1}번째 줄 끝: JSON 항목 사이에 쉼표(,)가 누락되었을 수 있습니다.`);
                 }
             }
-
             
             let report = '<strong>검사 결과:</strong>';
             results.forEach(r => report += `<p style="display: flex; align-items: center; gap: 6px;"><i data-feather="check" class="text-status-connected"></i> ${r}</p>`);
@@ -2129,81 +2368,111 @@
             resultDiv.style.display = 'block';
             feather.replace();
         }
-            
-        function setupLogButton(pairsCount, replacementCount, remainingChinese) {
-            if (currentLogData.length === 0) return;
+        
+                function updateInputAnalysisViewer() { // 함수 이름 변경
+            const text = document.getElementById('inputText').value;
+            const targetContainer = document.getElementById('input-text-header');
 
-            const targetContainer = document.getElementById('final-text-header');
-            if (!targetContainer) return;
-            
-            
-            removeLogUI();
+            removeLogUI(); // 기존 로그 UI 제거 함수 호출
 
+            if (!text.trim()) return;
+            
+            const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            
+            // 1. 플레이스홀더 추출 및 정렬
+            const chineseRegex = /[\u4e00-\u9fff]/;
+            const placeholderRegex = /{{\s*(.*?)\s*}}/g;
+            const placeholderMatches = [...new Set(text.match(placeholderRegex) || [])];
+            placeholderMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a)); // 중국어 포함 항목을 위로
+
+            let placeholderHtml = '';
+            if (placeholderMatches.length > 0) {
+                placeholderHtml += `
+                    <div style="padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: #ccc;">
+                        <p style="margin: 0 0 4px;"><strong>플레이스홀더 요약:</strong></p>
+                        <p style="margin: 0;">총 <strong>${placeholderMatches.length}개</strong>의 고유한 플레이스홀더가 발견되었습니다.</p>
+                    </div>
+                `;
+                placeholderMatches.forEach((item, index) => {
+                    const truncatedItem = item.length > 50 ? escapeHtml(item.substring(0, 50)) + '...' : escapeHtml(item);
+                    placeholderHtml += `<p style="margin:0 0 2px;"><span style="color: #aaa; width: 2.5em; display: inline-block;">${index + 1}.</span><code>${truncatedItem}</code></p>`;
+                });
+            }
+
+            // 2. JS 변수 선언 추출 및 정렬
+            const varRegex = /(?:const|let|var)\s+([a-zA-Z0-9_$]*[\u4e00-\u9fff]+[a-zA-Z0-9_$]*)|(?:const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
+            const varMatches = [...new Set(Array.from(text.matchAll(varRegex), m => m[1] || m[2]))];
+            varMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a)); // 중국어 포함 항목을 위로
+
+            let varHtml = '';
+            if (varMatches.length > 0) {
+                varHtml += `
+                    <div style="padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: #ccc;">
+                        <p style="margin: 0 0 4px;"><strong>JS 변수 선언 요약:</strong></p>
+                        <p style="margin: 0;">총 <strong>${varMatches.length}개</strong>의 고유한 변수가 선언되었습니다.</p>
+                    </div>
+                `;
+                varMatches.forEach((item, index) => {
+                    varHtml += `<p style="margin:0 0 2px;"><span style="color: #aaa; width: 2.5em; display: inline-block;">${index + 1}.</span><code>${escapeHtml(item)}</code></p>`;
+                });
+            }
+
+            // 3. HTML 합치기 및 로그 버튼 생성
+            let finalLogContent = '';
+            if (placeholderHtml) {
+                finalLogContent += placeholderHtml;
+            }
+            if (varHtml) {
+                if (placeholderHtml) { // 플레이스홀더와 변수 선언이 모두 있으면 구분선 추가
+                    finalLogContent += '<hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 12px 0;">';
+                }
+                finalLogContent += varHtml;
+            }
+            
+            if (finalLogContent) {
+                setupLogButton(targetContainer, finalLogContent, '입력 텍스트 분석 보기');
+            }
+        }
+        
+        function setupLogButton(targetContainer, logContentHTML, logTitle = '변환 로그 보기') {
+            if (!targetContainer || !logContentHTML) return;
+
+            const existingBtn = targetContainer.querySelector('.btn-log-viewer');
+            const existingPopover = targetContainer.querySelector('.log-popover');
+            if (existingBtn) existingBtn.remove();
+            if (existingPopover) existingPopover.remove();
             
             const popover = document.createElement('div');
             popover.className = 'log-popover';
-
-            
-            const remainingList = remainingChinese.length > 0
-                ? remainingChinese.map(c => `<code>"${c}"</code>`).join(', ')
-                : '없음';
-
-            
-            const summaryHTML = `
-                <div style="padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #ccc;">
-                    <p style="margin: 0 0 4px;"><strong>요약:</strong></p>
-                    <p style="margin: 0 0 2px;">- 사용된 변환 쌍: ${pairsCount}개</p>
-                    <p style="margin: 0 0_2px;">- 총 변환 횟수: ${replacementCount}회</p>
-                    <p style="margin: 0;">- 미변환 중국어: ${remainingList}</p>
-                </div>
-            `;
-            
-            
-            const logListHTML = currentLogData.map((log, index) => {
-                
-                const parts = log.split('→');
-                const original = parts[0] ? parts[0].trim() : '';
-                const translated = parts[1] ? parts[1].trim() : '';
-                return `<p style="margin:0 0 2px;"><span style="color: #aaa; width: 2.5em; display: inline-block;">${index + 1}.</span>${original} <span style="color: #888;">→</span> <span style="color: #63e6be;">${translated}</span></p>`;
-            }).join('');
-            
-            
-            popover.innerHTML = summaryHTML + logListHTML;
-
+            popover.innerHTML = logContentHTML;
             
             const button = document.createElement('button');
             button.className = 'btn-log-viewer';
-            button.title = '변환 로그 보기';
+            button.title = logTitle;
             button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
-            
             
             targetContainer.appendChild(button);
             targetContainer.appendChild(popover);
-
-            
+            feather.replace();
             
             const handleOutsideClick = (event) => {
-                
                 if (!button.contains(event.target) && !popover.contains(event.target)) {
                     popover.classList.remove('visible');
-                    
                     document.removeEventListener('click', handleOutsideClick);
                 }
             };
-            
             
             button.addEventListener('click', (event) => {
                 event.stopPropagation(); 
                 const isVisible = popover.classList.toggle('visible');
                 
                 if (isVisible) {
-                    
                     document.addEventListener('click', handleOutsideClick);
                 } else {
-                    
                     document.removeEventListener('click', handleOutsideClick);
                 }
             });
+
         }
 
         function removeLogUI() {
@@ -2213,8 +2482,166 @@
             if (existingPopover) existingPopover.remove();
         }
 
-        applySavedTheme(); 
+                function getCharCounts(charArray) {
+            return charArray.reduce((acc, char) => {
+                acc[char] = (acc[char] || 0) + 1;
+                return acc;
+            }, {});
+        }
 
+        function validateSpecialCharacters() {
+            const text = document.getElementById('translationResult').value;
+            if (!text.trim()) {
+                showToast('검사할 번역 결과가 없습니다.', 'info');
+                return;
+            }
+
+            const specialCharRegex = /[^\p{L}\p{N}\s]/gu;
+            
+            const lines = text.split('\n');
+            const mismatches = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (!line.trim() || !line.includes('=')) continue;
+
+                const equalIndex = line.indexOf('=');
+                const original = line.substring(0, equalIndex);
+                const translated = line.substring(equalIndex + 1);
+
+                const originalChars = original.match(specialCharRegex) || [];
+                const translatedChars = translated.match(specialCharRegex) || [];
+
+                if (originalChars.length !== translatedChars.length) {
+                    mismatches.push({ lineNum: i + 1, original, translated, originalChars, translatedChars });
+                    continue;
+                }
+
+                const originalCounts = getCharCounts(originalChars);
+                const translatedCounts = getCharCounts(translatedChars);
+
+                let isMatch = true;
+                for (const char in originalCounts) {
+                    if (originalCounts[char] !== translatedCounts[char]) {
+                        isMatch = false;
+                        break;
+                    }
+                }
+
+                if (isMatch) {
+                    for (const char in translatedCounts) {
+                        if (translatedCounts[char] !== originalCounts[char]) {
+                            isMatch = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (!isMatch) {
+                    mismatches.push({ lineNum: i + 1, original, translated, originalChars, translatedChars });
+                }
+            }
+
+            const countOccurrences = (str, sub) => str.split(sub).length - 1;
+
+            const specialChars = ['{', '}', '[', ']', '(', ')', '"', '"', '"', "'", "'", "'", '`', '<', '>', '\\', '{{', '}}', '|', '*', '_', '~', '^', '%', '$', '#', '@'];
+
+            mismatches.sort((a, b) => {
+                const aHasMismatch = specialChars.some(char => 
+                    countOccurrences(a.original, char) !== countOccurrences(a.translated, char)
+                );
+                
+                const bHasMismatch = specialChars.some(char => 
+                    countOccurrences(b.original, char) !== countOccurrences(b.translated, char)
+                );
+
+                if (aHasMismatch && !bHasMismatch) return -1;
+                if (!aHasMismatch && bHasMismatch) return 1;
+                return 0;
+            });
+
+            const targetContainer = document.getElementById('translation-result-header');
+
+            if (mismatches.length > 0) {
+                showToast(`검사 완료: ${mismatches.length}개의 라인에서 특수문자 불일치가 발견되었습니다.`, 'error');
+
+                let logContentHTML = `
+                    <div style="padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: #ccc; overflow: hidden;">
+                        <div style="float: left;">
+                            <p style="margin: 0 0 4px;"><strong>검사 요약:</strong></p>
+                            <p style="margin: 0;">총 ${lines.filter(l => l.includes('=')).length}줄 중 <strong id="mismatch-count" style="color: #f0a7a7;">${mismatches.length}</strong> 라인에서 불일치가 발견되었습니다.</p>
+                        </div>
+                        <div style="float: left; font-size: 11px; margin-top: 5px;">
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                                <input type="checkbox" id="hide-comma-mismatch-checkbox" onchange="filterLogView()">
+                                쉼표 개수만 다른 경우 숨기기
+                            </label>
+                        </div>
+                    </div>
+                `;
+                
+                mismatches.forEach(item => {
+                    const originalCounts = getCharCounts(item.originalChars);
+                    const translatedCounts = getCharCounts(item.translatedChars);
+                    
+                    // 쉼표만 다른지 확인하기 위해, 두 객체의 복사본에서 모든 쉼표를 제거
+                    const tempOriginalCounts = { ...originalCounts };
+                    const tempTranslatedCounts = { ...translatedCounts };
+                    delete tempOriginalCounts[','];
+                    delete tempOriginalCounts['，'];
+                    delete tempTranslatedCounts[','];
+                    delete tempTranslatedCounts['，'];
+
+                    const isCommaOnlyMismatch = JSON.stringify(tempOriginalCounts) === JSON.stringify(tempTranslatedCounts);
+
+                    const escapeHtml = (unsafe) => unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+                    const originalCharsStr = item.originalChars.map(c => `<code>${escapeHtml(c)}</code>`).join(' ');
+                    const translatedCharsStr = item.translatedChars.map(c => `<code>${escapeHtml(c)}</code>`).join(' ');
+
+                    logContentHTML += `
+                        <div class="log-mismatch-item" ${isCommaOnlyMismatch ? 'data-is-comma-only="true"' : ''} style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <p style="color: #aaa; font-weight: bold; margin: 0 0 5px;">Line ${item.lineNum}:</p>
+                            <p style="margin: 0 0 2px;"><span style="color:#888;">원본:</span> <code>${escapeHtml(item.original)}</code></p>
+                            <p style="margin: 0 0 8px;"><span style="color:#888;">번역:</span> <code style="color: #63e6be;">${escapeHtml(item.translated)}</code></p>
+                            <p style="margin: 0 0 2px; font-size: 11px; color: #f0a7a7;"><strong style="color: #aaa;">불일치 상세:</strong></p>
+                            <p style="margin: 0 0 2px; font-size: 11px; color: #ddd;">- 원본 특수문자 (${item.originalChars.length}개): ${originalCharsStr || '없음'}</p>
+                            <p style="margin: 0; font-size: 11px; color: #ddd;">- 번역 특수문자 (${item.translatedChars.length}개): ${translatedCharsStr || '없음'}</p>
+                        </div>
+                    `;
+                });
+                setupLogButton(targetContainer, logContentHTML, '특수문자 검사 로그 보기');
+            } else {
+                const existingBtn = targetContainer.querySelector('.btn-log-viewer');
+                if (existingBtn) existingBtn.remove();
+                const existingPopover = targetContainer.querySelector('.log-popover');
+                if (existingPopover) existingPopover.remove();
+
+                showToast('검사 완료: 모든 특수문자가 일치합니다!', 'success');
+            }
+        }
+
+        function filterLogView() {
+            const checkbox = document.getElementById('hide-comma-mismatch-checkbox');
+            const items = document.querySelectorAll('.log-mismatch-item');
+            let visibleMismatches = 0;
+
+            items.forEach(item => {
+                const isCommaOnly = item.getAttribute('data-is-comma-only') === 'true';
+                if (checkbox.checked && isCommaOnly) {
+                    item.style.display = 'none';
+                } else {
+                    item.style.display = 'block';
+                    visibleMismatches++;
+                }
+            });
+
+            const countElement = document.getElementById('mismatch-count');
+            if (countElement) {
+                countElement.textContent = visibleMismatches;
+            }
+        }
+
+        applySavedTheme(); 
         feather.replace(); 
     </script>
 </body>
