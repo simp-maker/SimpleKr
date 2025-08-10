@@ -317,9 +317,9 @@
             font-size: 12px;
             color: var(--text-subtitle);
             background-color: var(--bg-input);
-            padding: 2px 6px;
+            padding: 2px 4px;
             border-radius: 5px;
-            pointer-events: none; /* 마우스 클릭이 카운터 뒤의 텍스트창으로 전달되도록 설정 */
+            pointer-events: none;
             transition: color 0.3s ease, background-color 0.3s ease;
             opacity: 0.8;
         }
@@ -831,10 +831,10 @@
 
         #update-log-popover {
             position: fixed;
-            bottom: 60px; /* 화면 하단으로부터의 거리 */
-            left: 50%;   /* 화면 왼쪽에서 50% 지점 */
-            top: auto;   /* 기존 top 스타일 초기화 */
-            right: auto; /* 기존 right 스타일 초기화 */
+            bottom: 60px;
+            left: 50%;
+            top: auto;
+            right: auto;
             width: 350px;
             transform-origin: bottom center;
             z-index: 1000;
@@ -1201,7 +1201,7 @@
 
         function loadApiKeyForProvider() {
             const provider = document.getElementById('apiProvider').value;
-            const apiKeyStorageKey = `${provider}ApiKey`; // e.g., 'geminiApiKey' or 'openaiApiKey'
+            const apiKeyStorageKey = `${provider}ApiKey`;
             
             document.getElementById('apiKey').value = localStorage.getItem(apiKeyStorageKey) || '';
         }
@@ -1210,7 +1210,6 @@
             const textarea = document.getElementById(textareaId);
             const counter = document.getElementById(textareaId + 'Counter');
             if (textarea && counter) {
-                // 숫자를 읽기 쉽게 3자리마다 콤마(,)를 추가합니다.
                 const count = textarea.value.length.toLocaleString();
                 counter.textContent = `${count}자`;
             }
@@ -1220,18 +1219,14 @@
             if (history.scrollRestoration) {
                 history.scrollRestoration = 'manual';
             }
-
-            // 1. UI 요소 채우기
             updatePromptSelect();
 
-            // 2. 설정 값 불러오기
             const savedProvider = localStorage.getItem('apiProvider') || 'gemini';
             const savedModel = localStorage.getItem('apiModel') || (savedProvider === 'openai' ? 'gpt-4o' : 'gemini-2.5-pro');
             const savedPrompt = localStorage.getItem('selectedPrompt') || 'default';
 
-            // 3. UI에 설정 적용
             document.getElementById('apiProvider').value = savedProvider;
-            handleProviderChange(); // 모델 목록 채우기 및 연결 테스트 실행
+            handleProviderChange();
             
             const modelSelect = document.getElementById('apiModel');
             if (Array.from(modelSelect.options).some(opt => opt.value === savedModel)) {
@@ -1251,15 +1246,9 @@
             document.getElementById('topP').value = localStorage.getItem('topP') || '0.98';
             document.getElementById('topK').value = localStorage.getItem('topK') || '0';
 
-            // 4. UI 업데이트 및 최종 작업
             loadSelectedPrompt();
             updateLanguageLabels();
-            handleModelChange(modelSelect.value); // 여기서 한번 더 UI를 업데이트 해줍니다.
-            
-            // [수정] 중복 호출되던 연결 테스트 부분을 삭제했습니다.
-            // handleProviderChange()가 이미 실행했기 때문에 필요 없습니다.
-
-            // 5. 설정 저장 이벤트 리스너 연결
+            handleModelChange(modelSelect.value); 
             const settingsToWatch = [
                 'sourceLanguage', 'apiProvider', 'apiModel', 'apiKey', 'promptSelect',
                 'temperature', 'maxOutputTokens', 'topP', 'topK'
@@ -1275,10 +1264,8 @@
             textareaIds.forEach(id => {
                 const textarea = document.getElementById(id);
                 if (textarea) {
-                    // 페이지 로드 시 초기 글자 수 계산
                     updateCharCounter(id);
 
-                    // 각 텍스트 영역에 입력 이벤트 리스너 추가
                     textarea.addEventListener('input', () => updateCharCounter(id));
                 }
             });
@@ -1288,10 +1275,8 @@
             const provider = document.getElementById('apiProvider').value;
             const apiKeyStorageKey = `${provider}ApiKey`;
 
-            // [수정] 제공자에 맞는 키 이름으로 API 키를 저장합니다.
             localStorage.setItem(apiKeyStorageKey, document.getElementById('apiKey').value);
 
-            // 나머지 설정 저장
             localStorage.setItem('sourceLanguage', document.getElementById('sourceLanguage').value);
             localStorage.setItem('apiProvider', document.getElementById('apiProvider').value);
             localStorage.setItem('apiModel', document.getElementById('apiModel').value);
@@ -1356,6 +1341,7 @@
         function clearInputText() {
             if (confirm("입력창의 모든 내용을 지우시겠습니까?")) {
                 document.getElementById('inputText').value = '';
+                updateCharCounter('inputText');
                 updateReplaceButtonState();
                 updateInputTextLabel(); 
                 showToast('입력창을 비웠습니다.');
@@ -1603,7 +1589,6 @@
             const topPInput = document.getElementById('topP');
             const topPLabel = document.querySelector('label[for="topP"]');
 
-            // Top K 처리 (제공자 기준)
             if (apiProvider === 'openai') {
                 topKInput.disabled = true;
                 topKLabel.style.opacity = '0.5';
@@ -1612,7 +1597,6 @@
                 topKLabel.style.opacity = '1';
             }
 
-            // Top P 처리 (특정 모델 기준)
             if (apiProvider === 'openai' && OPENAI_MODELS_NO_TOP_P.includes(selectedModel)) {
                 topPInput.disabled = true;
                 topPLabel.style.opacity = '0.5';
@@ -1641,8 +1625,8 @@
                 handleModelChange(models[0]);
             }
             
-            updateApiSpecificParamsUI(); // Top K 등 UI 업데이트
-            loadApiKeyForProvider();     // 새 제공자에 맞는 API 키를 input에 불러오기
+            updateApiSpecificParamsUI(); 
+            loadApiKeyForProvider(); 
 
             if (document.getElementById('apiKey').value) {
                 testConnection();
@@ -1757,7 +1741,6 @@
                             temperature: parseFloat(document.getElementById('temperature').value),
                         };
 
-                        // [수정] top_p 파라미터를 조건부로 추가합니다.
                         if (!OPENAI_MODELS_NO_TOP_P.includes(model)) {
                             requestBody.top_p = parseFloat(document.getElementById('topP').value);
                         }
@@ -1911,11 +1894,10 @@
                 return;
             }
 
-            // 길이를 기준으로 내림차순 정렬. 가장 긴 것부터 변환해야 중첩 오류 방지
             allPairs.sort((a, b) => b.length - a.length);
             
             let result = inputText;
-            const processedRanges = []; // 변환된 영역을 기록할 배열
+            const processedRanges = [];
             let replacementCount = 0; 
 
             allPairs.forEach(pair => {
@@ -1927,7 +1909,6 @@
                     
                     const foundEnd = foundIndex + pair.original.length;
                     
-                    // 찾은 영역이 이전에 변환된 영역과 겹치는지 확인
                     const isOverlapping = processedRanges.some(range => 
                         (foundIndex < range.end && foundEnd > range.start)
                     );
@@ -1942,13 +1923,11 @@
 
                         const lengthDiff = pair.translation.length - pair.original.length;
                         
-                        // 변환된 영역 정보를 기록
                         processedRanges.push({
                             start: foundIndex,
                             end: foundIndex + pair.translation.length
                         });
                         
-                        // 이후에 처리될 영역들의 위치를 바뀐 길이만큼 조정
                         processedRanges.forEach(range => {
                             if (range.start > foundIndex) {
                                 range.start += lengthDiff;
@@ -1964,6 +1943,7 @@
             });
 
             document.getElementById('finalResult').value = result;
+            updateCharCounter('finalResult');
 
             if (replacementCount > 0) {
                 showToast(`${replacementCount}개 항목의 일괄 변환이 완료되었습니다.`, 'success');
@@ -2045,7 +2025,6 @@ const settings = {
                 apiProvider: document.getElementById('apiProvider').value,
                 apiModel: document.getElementById('apiModel').value,
 
-                // localStorage에서 각 제공자의 API 키를 직접 읽어와 저장합니다.
                 geminiApiKey: localStorage.getItem('geminiApiKey') || '',
                 openaiApiKey: localStorage.getItem('openaiApiKey') || '',
 
@@ -2084,7 +2063,6 @@ const settings = {
                             document.getElementById('sourceLanguage').value = settings.sourceLanguage || 'chinese';
                             document.getElementById('apiProvider').value = settings.apiProvider || 'gemini';
                             document.getElementById('apiModel').value = settings.apiModel || 'gemini-2.5-pro';
-                            // 'apiKey'를 직접 설정하는 대신, 아래 로직이 localStorage를 업데이트합니다.
                             
                             document.getElementById('translationPrompt').value = settings.translationPrompt || '';
                             
@@ -2093,8 +2071,6 @@ const settings = {
                             document.getElementById('topP').value = settings.topP || '0.98';
                             document.getElementById('topK').value = settings.topK || '0';
 
-                            // 파일에 있는 모든 설정을 localStorage에 저장합니다.
-                            // 이렇게 하면 geminiApiKey와 openaiApiKey도 자동으로 저장됩니다.
                             for (const key in settings) {
                                 if (Object.hasOwnProperty.call(settings, key)) {
                                     if (key === 'savedPrompts') {
@@ -2107,8 +2083,6 @@ const settings = {
                             
                             updatePromptSelect();
                             updateLanguageLabels();
-
-                            // 제공자 변경 핸들러를 호출하여 모델 목록과 API 키 입력을 새로고침합니다.
                             handleProviderChange();
                             
                             showToast('설정이 성공적으로 불러와졌습니다!', 'success');
@@ -2168,7 +2142,7 @@ const settings = {
         async function testConnection() {
             const apiKey = document.getElementById('apiKey').value;
             const model = document.getElementById('apiModel').value;
-            const apiProvider = document.getElementById('apiProvider').value; // 제공자 확인
+            const apiProvider = document.getElementById('apiProvider').value;
             const statusElement = document.getElementById('connectionStatus');
 
             if (!apiKey) {
@@ -2183,16 +2157,14 @@ const settings = {
             let fetchOptions = {};
 
             if (apiProvider === 'openai') {
-                // --- OpenAI 연결 테스트 로직 ---
                 apiEndpoint = `https://api.openai.com/v1/models/${model}`;
                 fetchOptions = {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`, // OpenAI는 Bearer 토큰 인증 사용
+                        'Authorization': `Bearer ${apiKey}`,
                     }
                 };
-            } else { // 기본은 'gemini'
-                // --- 기존 Gemini 연결 테스트 로직 ---
+            } else { 
                 let geminiModel = model;
                 if (geminiModel.endsWith('-latest')) {
                     geminiModel = geminiModel.slice(0, -7);
@@ -2371,6 +2343,9 @@ const settings = {
                 extractedChineseEl.value = '';
                 translationResultEl.value = '';
                 finalResultEl.value = '';
+                updateCharCounter('extractedChinese');
+                updateCharCounter('translationResult');
+                updateCharCounter('finalResult');
                 document.getElementById('extractStats').style.display = 'none';
                 document.getElementById('translationStats').style.display = 'none';
                 document.getElementById('validationResult').style.display = 'none';
@@ -2668,7 +2643,7 @@ const settings = {
             const chineseRegex = /[\u4e00-\u9fff]/;
             const placeholderRegex = /{{\s*(.*?)\s*}}/g;
             const placeholderMatches = [...new Set(text.match(placeholderRegex) || [])];
-            placeholderMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a)); // 중국어 포함 항목을 위로
+            placeholderMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a)); 
 
             let placeholderHtml = '';
             if (placeholderMatches.length > 0) {
@@ -2686,7 +2661,7 @@ const settings = {
 
             const varRegex = /(?:const|let|var)\s+([a-zA-Z0-9_$]*[\u4e00-\u9fff]+[a-zA-Z0-9_$]*)|(?:const|let|var)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g;
             const varMatches = [...new Set(Array.from(text.matchAll(varRegex), m => m[1] || m[2]))];
-            varMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a)); // 중국어 포함 항목을 위로
+            varMatches.sort((a, b) => chineseRegex.test(b) - chineseRegex.test(a));
 
             let varHtml = '';
             if (varMatches.length > 0) {
@@ -2759,10 +2734,14 @@ const settings = {
         }
 
         function removeLogUI() {
-            const existingBtn = document.querySelector('.btn-log-viewer');
-            const existingPopover = document.querySelector('.log-popover');
-            if (existingBtn) existingBtn.remove();
-            if (existingPopover) existingPopover.remove();
+            const headers = document.querySelectorAll('.section-title-container');
+            headers.forEach(header => {
+                const existingBtn = header.querySelector('.btn-log-viewer');
+                const existingPopover = header.querySelector('.log-popover');
+                
+                if (existingBtn) existingBtn.remove();
+                if (existingPopover) existingPopover.remove();
+            });
         }
 
                 function getCharCounts(charArray) {
@@ -2936,7 +2915,6 @@ const settings = {
             };
             
             if (isVisible) {
-                // 다른 팝오버는 닫기
                 const otherPopovers = document.querySelectorAll('.log-popover.visible');
                 otherPopovers.forEach(p => {
                     if(p.id !== 'update-log-popover') p.classList.remove('visible');
