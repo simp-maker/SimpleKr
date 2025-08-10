@@ -1476,7 +1476,7 @@
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
             
-            linkElement.setAttribute('download', `EasyKr_prompt_${selectedName}.json`);
+            linkElement.setAttribute('download', `SimpleKr_prompt_${selectedName}.json`);
             linkElement.click();
         }
 
@@ -2040,7 +2040,7 @@ const settings = {
             const dataStr = JSON.stringify(settings, null, 2);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
-            const exportFileDefaultName = 'EasyKr_settings.json';
+            const exportFileDefaultName = 'SimpleKr_settings.json';
             
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
@@ -2439,7 +2439,7 @@ const settings = {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'EasyKr_pairs.txt';
+            a.download = 'SimpleKr_pairs.txt';
             a.click();
             URL.revokeObjectURL(url);
         }
