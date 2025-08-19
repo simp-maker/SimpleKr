@@ -1768,7 +1768,7 @@
             const select = document.getElementById('promptSelect');
             const savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '{}');
             
-            select.innerHTML = '<option value="default">기본 프롬프트</option>';
+            select.innerHTML = '<option value="default">기본 프롬프트 (중국어 → 한국어)</option>';
             
             for (const name in savedPrompts) {
                 const option = document.createElement('option');
