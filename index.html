@@ -1452,6 +1452,7 @@
         <p style="color: #aaa;">2.0.1<br>
         * 중국어 추출 정규식 버그 수정</p>
         <p style="color: #aaa;">* AI 요청 청크 나누기 버그 수정</p>
+        <p style="color: #aaa;">* 프롬프트 관련 오류 수정</p>
         <p style="color: #aaa;">2.0.0<br>
         * JSON 형식의 봇카드가 임포트될 경우 키워드 추출할 수 있는 창을 추가하고, 번역된 키워드들이 임시 단어사전으로 사용될 수 있도록 함</p>
         <p style="color: #aaa;">* 기계 번역을 활용할 수 있도록 `원문=번역문` 형식으로 리스트 합치기 기능 추가함</p>
@@ -2126,8 +2127,9 @@
                 charLimit = LOW_SPEC_MODELS[model].safeInputChars;
             }
             const effectiveCharLimit = charLimit - 200;
+            const lineLimit = 200;
 
-            const chunks = chunkLinesByCharLimit(extractedChineseArray, effectiveCharLimit);
+            const chunks = chunkLinesByCharLimit(extractedChineseArray, effectiveCharLimit, lineLimit);
             const totalChunks = chunks.length;
 
             for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
@@ -2138,8 +2140,7 @@
                 }
 
                 try {
-                    const chunkLines = chunks[chunkIndex];
-                    const textToTranslate = chunkLines.join('\n');
+                    const textToTranslate = chunks[chunkIndex];
                                         
                     if (totalChunks > 1) {
                         showToast(`번역 중... (${chunkIndex + 1}/${totalChunks}번째 요청)`, 'persistent');
@@ -2261,6 +2262,46 @@
 
             document.querySelector('button[onclick="translateText()"]').style.display = 'inline-block';
             document.getElementById('stopTranslationBtn').style.display = 'none';
+        }
+
+        function chunkLinesByCharLimit(linesArray, maxChars, maxLines) {
+            const chunks = [];
+            if (!linesArray || linesArray.length === 0) {
+                return chunks;
+            }
+
+            let currentChunkLines = [];
+            let currentCharCount = 0;
+
+            for (const line of linesArray) {
+                const lineLength = line.length;
+
+                if (lineLength > maxChars) {
+                    if (currentChunkLines.length > 0) {
+                        chunks.push(currentChunkLines.join('\n'));
+                    }
+                    chunks.push(line);
+                    currentChunkLines = [];
+                    currentCharCount = 0;
+                    continue;
+                }
+
+                if (currentChunkLines.length > 0 &&
+                ((currentCharCount + lineLength + 1 > maxChars) || (currentChunkLines.length >= maxLines))) {
+                    chunks.push(currentChunkLines.join('\n'));
+                    currentChunkLines = [];
+                    currentCharCount = 0;
+                }
+
+                currentChunkLines.push(line);
+                currentCharCount += lineLength + 1;
+            }
+
+            if (currentChunkLines.length > 0) {
+                chunks.push(currentChunkLines.join('\n'));
+            }
+
+            return chunks;
         }
 
         function replaceText() {
