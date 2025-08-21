@@ -1306,6 +1306,10 @@
                 <input type="file" id="fileInput" class="file-input" accept=".txt,.json,.jsonl,.html,.css" onchange="loadFile()">
                 <button class="btn btn-primary" onclick="convertChinesePunctuation()" id="punctuationBtn" style="display: none;"><i data-feather="refresh-ccw"></i> 문장부호 변환 (권장)</button>
                 <button class="btn btn-primary" onclick="extractChinese()" id="extractBtn"><i data-feather="mouse-pointer"></i> 중국어 추출</button>
+                <div style="display: flex; align-items: center; gap: 5px; margin-left: 10px;">
+                    <input type="checkbox" id="splitVariablesCheckbox" style="cursor: pointer;">
+                    <label for="splitVariablesCheckbox" style="cursor: pointer; font-weight: normal; color: var(--text-label);">{{...}}, ${...} 제외</label>
+                </div>
             </div>
         </div>
         
@@ -1443,12 +1447,14 @@
         </div>
     </div>
     <div class="footer-info">
-        <span>SimpleKr V2.0.1 beta</span>
+        <span>SimpleKr V2.1.1 beta</span>
                 <button class="btn-log-viewer" title="업데이트 로그 보기" onclick="toggleUpdateLog(event)">
             <i data-feather="cloud"></i>
         </button>
     </div>
     <div id="update-log-popover" class="log-popover">
+        <p style="color: #aaa;">2.1.1<br>
+        * 변수 제외하고 추출 기능 추가</p>
         <p style="color: #aaa;">2.0.1<br>
         * 중국어 추출 정규식 버그 수정</p>
         <p style="color: #aaa;">* AI 요청 청크 나누기 버그 수정</p>
@@ -2728,6 +2734,8 @@
         }
 
         function extractChineseChunks(text) {
+            const shouldSplitVariables = document.getElementById('splitVariablesCheckbox').checked;
+            
             /* 중국어 문자 판별 */
             function isChinese(char) {
                 if (!char) return false;
@@ -2798,7 +2806,7 @@
                 while (i < line.length) {
                     const char = line[i];
                     
-                    if ((char === '{' && line[i + 1] === '{') || (char === '$' && line[i + 1] === '{')) {
+                    if (!shouldSplitVariables && ((char === '{' && line[i + 1] === '{') || (char === '$' && line[i + 1] === '{'))) {
                         const startPattern = (char === '{') ? '{{' : '${';
                         const endPattern = (char === '{') ? '}}' : '}';
                         const endIdx = line.indexOf(endPattern, i + startPattern.length);
