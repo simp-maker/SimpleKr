@@ -1204,6 +1204,8 @@
                 <div class="input-group">
                     <label for="apiModel">모델 선택</label>
                     <select id="apiModel" onchange="handleModelChange(this.value)">
+                        <option value="gemini-3-flash-preview">gemini-3-flash-preview</option>
+                        <option value="gemini-3-pro-preview">gemini-3-pro-preview</option>
                         <option value="gemini-2.5-pro">gemini-2.5-pro</option>
                         <option value="gemini-2.5-flash">gemini-2.5-flash</option>
                         <option value="gemini-2.0-flash">gemini-2.0-flash</option>
@@ -1540,7 +1542,7 @@
 
         const API_MODELS = {
             'gemini': [
-                'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash'
+                'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-3-pro-preview', 'gemini-3-flash-preview'
             ],
             'openai': [
                 'gpt-5', 'gpt-5-mini', 'gpt-5-chat-latest', 'gpt-5-nano', 
@@ -2559,7 +2561,7 @@
                             
                             document.getElementById('sourceLanguage').value = settings.sourceLanguage || 'chinese';
                             document.getElementById('apiProvider').value = settings.apiProvider || 'gemini';
-                            document.getElementById('apiModel').value = settings.apiModel || 'gemini-2.5-pro';
+                            document.getElementById('apiModel').value = settings.apiModel || 'gemini-3-flash-preview';
                             
                             document.getElementById('translationPrompt').value = settings.translationPrompt || '';
                             
